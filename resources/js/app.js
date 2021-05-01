@@ -8,6 +8,11 @@ import { routes } from "./router/index.js";
 
 Vue.use(VueRouter);
 
+import jQuery from "jquery";
+
+window.jQuery = jQuery;
+window.$ = jQuery;
+
 const router = new VueRouter({
     routes,
     mode: "history"

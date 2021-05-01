@@ -222,10 +222,8 @@
     </div>
 </template>
 
-<style>
+<style scoped>
+body {
+    padding-top: 56px;
+}
 </style>
-
-<script>
-import "../../../../public/css/blog-home.css";
-export default {};
-</script>
