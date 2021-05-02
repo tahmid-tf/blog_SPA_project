@@ -584,5 +584,11 @@
 import "../../../../public/vendor/jquery/jquery.js";
 import "../../../../public/vendor/bootstrap/js/bootstrap.bundle.min.js";
 import "../../../../public/vendor/jquery-easing/jquery.easing.min.js";
-export default {};
+export default {
+    mounted() {
+        axios.get("/api/user").then(el => {
+            console.log(el);
+        });
+    }
+};
 </script>
