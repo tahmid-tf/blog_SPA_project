@@ -7,12 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" type="text/css">
 
     <div id="app">
         <router-view></router-view>
     </div>
 </body>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/sb-admin-2.js') }}"></script>
+    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 </html>

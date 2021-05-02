@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="body">
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
@@ -223,7 +223,7 @@
 </template>
 
 <style scoped>
-body {
+.body {
     padding-top: 56px;
 }
 </style>
