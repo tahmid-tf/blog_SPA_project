@@ -13,7 +13,14 @@ class AuthController extends Controller
 {
     public function user()
     {
-        return Auth::user();
+        $user = Auth::user();
+
+        if($user){
+            return response()->json([
+                "user" => $user,
+                "status_code" => 200
+            ]);
+        }
     }
 
     public function register(Request $request)

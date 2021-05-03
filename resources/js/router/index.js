@@ -4,6 +4,7 @@ import BlogMainPage from "../components/blog/main_page.vue";
 import SinglePage from "../components/blog/single_page";
 import AdminPage from "../components/admin/admin_index";
 import AdminDashboard from "../components/admin/dashboard/dashboard";
+import LoginUi from "../components/administration/login_ui";
 
 const routes = [
     {
@@ -22,6 +23,14 @@ const routes = [
         path: "/admin/dashboard",
         component: AdminDashboard,
         name: "Dashboard"
+    },
+    {
+        path: "*",
+        redirect: "/"
+    },
+    {
+        path: "/login",
+        component: LoginUi
     }
 ];
 
