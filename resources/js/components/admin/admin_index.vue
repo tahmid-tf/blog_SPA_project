@@ -12,9 +12,10 @@
                     id="accordionSidebar"
                 >
                     <!-- Sidebar - Brand -->
-                    <a
+
+                    <router-link
+                        to="/"
                         class="sidebar-brand d-flex align-items-center justify-content-center"
-                        href="index.html"
                     >
                         <div class="sidebar-brand-icon rotate-n-15">
                             <i class="fas fa-laugh-wink"></i>
@@ -22,7 +23,7 @@
                         <div class="sidebar-brand-text mx-3">
                             SB Admin <sup>2</sup>
                         </div>
-                    </a>
+                    </router-link>
 
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0" />
@@ -48,37 +49,8 @@
                     </div>
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
-                        <a
-                            class="nav-link collapsed"
-                            href="#"
-                            data-toggle="collapse"
-                            data-target="#collapseTwo"
-                            aria-expanded="true"
-                            aria-controls="collapseTwo"
-                        >
-                            <i class="fas fa-fw fa-cog"></i>
-                            <span>Components</span>
-                        </a>
-                        <div
-                            id="collapseTwo"
-                            class="collapse"
-                            aria-labelledby="headingTwo"
-                            data-parent="#accordionSidebar"
-                        >
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">
-                                    Custom Components:
-                                </h6>
-                                <a class="collapse-item" href="buttons.html"
-                                    >Buttons</a
-                                >
-                                <a class="collapse-item" href="cards.html"
-                                    >Cards</a
-                                >
-                            </div>
-                        </div>
-                    </li>
+
+                    <post-components></post-components>
 
                     <!-- Nav Item - Utilities Collapse Menu -->
                     <li class="nav-item">
@@ -617,11 +589,14 @@
                                 Cancel
                             </button>
 
-                            <button class="btn btn-primary" @click="logout_button">
+                            <button
+                                class="btn btn-primary"
+                                @click="logout_button"
+                            >
                                 Logout
                             </button>
 
-<!--                            <router-link to="/login" tag="a" class="btn btn-primary">Logout</router-link>-->
+                            <!--                            <router-link to="/login" tag="a" class="btn btn-primary">Logout</router-link>-->
                         </div>
                     </div>
                 </div>
@@ -640,6 +615,7 @@ import "../../../../public/vendor/jquery/jquery.js";
 import "../../../../public/vendor/bootstrap/js/bootstrap.bundle.min.js";
 import "../../../../public/vendor/jquery-easing/jquery.easing.min.js";
 import LoginUi from "../administration/login_ui";
+import PostComponents from "../admin/sidebar_components/post_components";
 export default {
     data() {
         return {
@@ -648,11 +624,12 @@ export default {
     },
 
     components: {
-        LoginUi
+        LoginUi,
+        PostComponents
     },
 
-    methods:{
-        logout_button(){
+    methods: {
+        logout_button() {
             axios.post("/api/logout").then(el => {
                 this.$router.push("/");
                 location.reload();
@@ -662,9 +639,9 @@ export default {
 
     mounted() {
         axios.get("/api/user").then(el => {
-            if(el.status === 200){
+            if (el.status === 200) {
                 this.state_status = true;
-            }else {
+            } else {
                 this.state_status = false;
             }
         });
@@ -683,7 +660,7 @@ export default {
         //         this.status = el.status;
         //         console.log(el);
         //     });
-    },
+    }
 
     // test route entering
 };

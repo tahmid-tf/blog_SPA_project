@@ -1,5 +1,15 @@
 <template>
     <div class="body">
+        <!-- <ul>
+            <li v-for="post in laravelData.data" :key="post.id">
+                {{ post.title }}
+            </li>
+        </ul>
+
+        <pagination
+            :data="laravelData"
+            @pagination-change-page="getResults"
+        ></pagination> -->
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
@@ -47,93 +57,41 @@
                         <small>Secondary Text</small>
                     </h1>
 
-                    <!-- Blog Post -->
-                    <div class="card mb-4">
-                        <img
-                            class="card-img-top"
-                            src="http://placehold.it/750x300"
-                            alt="Card image cap"
-                        />
-                        <div class="card-body">
-                            <h2 class="card-title">Post Title</h2>
-                            <p class="card-text">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Reiciendis aliquid atque,
-                                nulla? Quos cum ex quis soluta, a laboriosam.
-                                Dicta expedita corporis animi vero voluptate
-                                voluptatibus possimus, veniam magni quis!
-                            </p>
-                            <a href="#" class="btn btn-primary"
-                                >Read More &rarr;</a
-                            >
+                    <span v-for="post in laravelData.data" :key="post.id">
+                        <!-- Blog Post -->
+                        <div class="card mb-4">
+                            <img
+                                class="card-img-top"
+                                :src="'storage/' + post.image"
+                                alt="Card image cap"
+                            />
+                            <div class="card-body">
+                                <h2 class="card-title">{{ post.title }}</h2>
+                                <p class="card-text">
+                                    {{ post.description }}
+                                </p>
+                                <a href="#" class="btn btn-primary"
+                                    >Read More &rarr;</a
+                                >
+                            </div>
+                            <div class="card-footer text-muted">
+                                {{ post.created_at }}
+                                <p style="color : green">
+                                    Posted by - {{ post.username }}
+                                </p>
+                            </div>
                         </div>
-                        <div class="card-footer text-muted">
-                            Posted on January 1, 2017 by
-                            <a href="#">Start Bootstrap</a>
-                        </div>
-                    </div>
-
-                    <!-- Blog Post -->
-                    <div class="card mb-4">
-                        <img
-                            class="card-img-top"
-                            src="http://placehold.it/750x300"
-                            alt="Card image cap"
-                        />
-                        <div class="card-body">
-                            <h2 class="card-title">Post Title</h2>
-                            <p class="card-text">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Reiciendis aliquid atque,
-                                nulla? Quos cum ex quis soluta, a laboriosam.
-                                Dicta expedita corporis animi vero voluptate
-                                voluptatibus possimus, veniam magni quis!
-                            </p>
-                            <a href="#" class="btn btn-primary"
-                                >Read More &rarr;</a
-                            >
-                        </div>
-                        <div class="card-footer text-muted">
-                            Posted on January 1, 2017 by
-                            <a href="#">Start Bootstrap</a>
-                        </div>
-                    </div>
-
-                    <!-- Blog Post -->
-                    <div class="card mb-4">
-                        <img
-                            class="card-img-top"
-                            src="http://placehold.it/750x300"
-                            alt="Card image cap"
-                        />
-                        <div class="card-body">
-                            <h2 class="card-title">Post Title</h2>
-                            <p class="card-text">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Reiciendis aliquid atque,
-                                nulla? Quos cum ex quis soluta, a laboriosam.
-                                Dicta expedita corporis animi vero voluptate
-                                voluptatibus possimus, veniam magni quis!
-                            </p>
-                            <a href="#" class="btn btn-primary"
-                                >Read More &rarr;</a
-                            >
-                        </div>
-                        <div class="card-footer text-muted">
-                            Posted on January 1, 2017 by
-                            <a href="#">Start Bootstrap</a>
-                        </div>
-                    </div>
+                    </span>
 
                     <!-- Pagination -->
-                    <ul class="pagination justify-content-center mb-4">
-                        <li class="page-item">
-                            <a class="page-link" href="#">&larr; Older</a>
-                        </li>
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">Newer &rarr;</a>
-                        </li>
-                    </ul>
+                    <div style="display : flex; justify-content : center">
+                        <pagination
+                            :data="laravelData"
+                            @pagination-change-page="getResults"
+                        ></pagination>
+                    </div>
+
+                    <!-- Navigation -->
                 </div>
 
                 <!-- Sidebar Widgets Column -->
@@ -221,6 +179,37 @@
         </footer>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            laravelData: {}
+        };
+    },
+    mounted() {
+        this.getResults();
+    },
+    methods: {
+        // Our method to GET results from a Laravel endpoint
+        getResults(page = 1) {
+            axios.get("/api/posts?page=" + page).then(response => {
+                response.data.posts.data.forEach(element => {
+                    let id = element.user_id;
+                    // console.log(response.data.users);
+                    response.data.users.forEach(el => {
+                        if (el.id === id) {
+                            element.username = el.name;
+                        }
+                    });
+                });
+                this.laravelData = response.data.posts;
+                console.log(this.laravelData);
+            });
+        }
+    }
+};
+</script>
 
 <style scoped>
 .body {

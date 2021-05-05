@@ -6,10 +6,10 @@
                 <div class="col-sm-12 col-md-8">
                     <div class="card signin-card">
                         <div class="card-body">
-<!--                            <img-->
-<!--                                src="layout_images/devlops.png"-->
-<!--                                class="img-fluid signin-img"-->
-<!--                            />-->
+                            <!--                            <img-->
+                            <!--                                src="layout_images/devlops.png"-->
+                            <!--                                class="img-fluid signin-img"-->
+                            <!--                            />-->
                             <h4 style="text-align: center">Admin Panel</h4>
                             <form class="signin-form" @submit.prevent="logIn">
                                 <div class="form-group">
@@ -37,7 +37,6 @@
                                     :disabled="disabled_status"
                                 >
                                     Log in
-
                                 </button>
 
                                 <!-- <div class="form-check">
@@ -50,7 +49,9 @@
                         </div>
                     </div>
 
-                    <router-link to="/" class="create-new-account">Home</router-link>
+                    <router-link to="/" class="create-new-account"
+                        >Home</router-link
+                    >
                 </div>
                 <div class="col"></div>
             </div>
@@ -63,21 +64,21 @@ import "../../../../public/css/style.css";
 export default {
     data() {
         return {
-            email : "",
-            password : "",
-            disabled_status : false
+            email: "",
+            password: "",
+            disabled_status: false
         };
     },
-    methods:{
-        logIn(){
+    methods: {
+        logIn() {
             axios
                 .post("/api/login", {
                     email: this.email,
                     password: this.password
                 })
                 .then(el => {
-                    if (el.status === 200){
-                        this.$router.push({ name : 'Dashboard' });
+                    if (el.status === 200) {
+                        this.$router.push({ name: "Dashboard" });
                     }
                 });
         }
@@ -85,20 +86,19 @@ export default {
 
     mounted() {
         axios.get("/api/user").then(el => {
-            if(el.status === 200){
+            if (el.status === 200) {
                 this.disabled_status = true;
-            }else {
+            } else {
                 this.state_status = false;
             }
         });
     },
 
-
     beforeRouteEnter(to, from, next) {
         axios.get("/api/user").then(el => {
             if (el.status === 200) {
                 next(false);
-            }else {
+            } else {
                 next(true);
             }
         });

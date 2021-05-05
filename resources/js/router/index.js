@@ -5,6 +5,7 @@ import SinglePage from "../components/blog/single_page";
 import AdminPage from "../components/admin/admin_index";
 import AdminDashboard from "../components/admin/dashboard/dashboard";
 import LoginUi from "../components/administration/login_ui";
+import CreatePost from "../components/admin/post/post_create";
 
 const routes = [
     {
@@ -31,6 +32,11 @@ const routes = [
     {
         path: "/login",
         component: LoginUi
+    },
+    {
+        path: "/admin/post/create",
+        component: CreatePost,
+        name: "CreatePost"
     }
 ];
 
