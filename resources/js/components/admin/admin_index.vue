@@ -1,9 +1,6 @@
 <template>
     <div>
-        <div v-if="!state_status">
-            <login-ui></login-ui>
-        </div>
-        <div class="body" v-else>
+        <div class="body">
             <!-- Page Wrapper -->
             <div id="wrapper">
                 <!-- Sidebar -->
@@ -619,7 +616,8 @@ import PostComponents from "../admin/sidebar_components/post_components";
 export default {
     data() {
         return {
-            state_status: false
+            state_status: false,
+            state_result: true
         };
     },
 
@@ -638,12 +636,30 @@ export default {
     },
 
     mounted() {
-        axios.get("/api/user").then(el => {
-            if (el.status === 200) {
-                this.state_status = true;
-            } else {
-                this.state_status = false;
-            }
+        // let d = axios.get("/api/user").then(el => {
+        //     if (!el.status === 200) {
+        //         this.state_status = true;
+        //     } else {
+        //         this.state_status = false;
+        //     }
+        // });
+
+        // console.log(d);
+
+        let promise = new Promise((resolve, reject) => {
+            axios
+                .get("/api/user")
+                .then(res => {
+                    // successfully got data
+                    resolve(res);
+                })
+                .catch(err => {
+                    // an error occured
+                    this.state_result = false;
+                    if (this.state_result == false) {
+                        this.$router.push("/login");
+                    }
+                });
         });
 
         // axios.post("/api/logout").then(el => {

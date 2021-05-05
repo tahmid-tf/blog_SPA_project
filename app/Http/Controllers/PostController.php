@@ -28,6 +28,15 @@ class PostController extends Controller
         ]);
     }
 
+    public function singlePosts($id){
+        $post = Post::find($id);
+        $user = User::all();
+        return response()->json([
+            'post' => $post,
+            'users' => $user
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -51,6 +60,7 @@ class PostController extends Controller
         $inputs = \request()->validate([
             'title' => 'required',
             'description' => 'required',
+            'category' => 'required',
             'image' => 'file'
         ]);
 
@@ -62,10 +72,6 @@ class PostController extends Controller
         return response()->json([
             "message" => "Succesfull"
         ]);
-
-        //  $pathfile = $request->file('image')->store('images','public');
-        //  $path = request('title');
-        //  return $path;
     }
 
     /**

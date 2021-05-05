@@ -92,16 +92,16 @@ export default {
                 this.state_status = false;
             }
         });
-    },
-
-    beforeRouteEnter(to, from, next) {
-        axios.get("/api/user").then(el => {
-            if (el.status === 200) {
-                next(false);
-            } else {
-                next(true);
-            }
-        });
     }
+
+    // beforeRouteEnter(to, from, next) {
+    //     axios.get("/api/user").then(el => {
+    //         if (el.status === 200) {
+    //             next(false);
+    //         } else {
+    //             next(true);
+    //         }
+    //     });
+    // }
 };
 </script>

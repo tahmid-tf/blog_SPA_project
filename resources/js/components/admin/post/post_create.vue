@@ -31,6 +31,19 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="exampleInputEmail">Category</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id=""
+                            placeholder="Enter Category"
+                            name="category"
+                            v-model="category"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
                         <label for="exampleInputEmail">Image</label>
                         <input
                             type="file"
@@ -55,6 +68,7 @@ export default {
             image: "",
             title: "",
             description: "",
+            category: "",
             uploadInfo: false
         };
     },
@@ -68,6 +82,7 @@ export default {
             const formData = new FormData();
             formData.set("title", this.title);
             formData.set("description", this.description);
+            formData.set("category", this.category);
             formData.set("image", this.image);
             axios.post("/api/post", formData).then(el => {
                 if (el.status === 200) {

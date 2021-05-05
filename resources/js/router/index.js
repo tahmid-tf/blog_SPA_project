@@ -6,6 +6,7 @@ import AdminPage from "../components/admin/admin_index";
 import AdminDashboard from "../components/admin/dashboard/dashboard";
 import LoginUi from "../components/administration/login_ui";
 import CreatePost from "../components/admin/post/post_create";
+import ViewPost from "../components/admin/post/post_view";
 
 const routes = [
     {
@@ -13,8 +14,9 @@ const routes = [
         component: BlogMainPage
     },
     {
-        path: "/single",
-        component: SinglePage
+        path: "/single/:id",
+        component: SinglePage,
+        name: "Single"
     },
     {
         path: "/admin",
@@ -31,12 +33,18 @@ const routes = [
     },
     {
         path: "/login",
-        component: LoginUi
+        component: LoginUi,
+        name: "Login"
     },
     {
         path: "/admin/post/create",
         component: CreatePost,
         name: "CreatePost"
+    },
+    {
+        path: "/admin/post/view",
+        component: ViewPost,
+        name: "ViewPost"
     }
 ];
 

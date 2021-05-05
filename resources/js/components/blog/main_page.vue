@@ -1,19 +1,10 @@
 <template>
     <div class="body">
-        <!-- <ul>
-            <li v-for="post in laravelData.data" :key="post.id">
-                {{ post.title }}
-            </li>
-        </ul>
-
-        <pagination
-            :data="laravelData"
-            @pagination-change-page="getResults"
-        ></pagination> -->
-        <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="#">Start Bootstrap</a>
+                <router-link to="/" tag="a" class="navbar-brand"
+                    >Blog</router-link
+                >
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -70,8 +61,15 @@
                                 <p class="card-text">
                                     {{ post.description }}
                                 </p>
-                                <a href="#" class="btn btn-primary"
-                                    >Read More &rarr;</a
+
+                                <router-link
+                                    :to="{
+                                        name: 'Single',
+                                        params: { id: post.id }
+                                    }"
+                                    class="btn btn-primary"
+                                    tag="a"
+                                    >Read More &rarr;</router-link
                                 >
                             </div>
                             <div class="card-footer text-muted">
@@ -196,7 +194,6 @@ export default {
             axios.get("/api/posts?page=" + page).then(response => {
                 response.data.posts.data.forEach(element => {
                     let id = element.user_id;
-                    // console.log(response.data.users);
                     response.data.users.forEach(el => {
                         if (el.id === id) {
                             element.username = el.name;
@@ -204,7 +201,6 @@ export default {
                     });
                 });
                 this.laravelData = response.data.posts;
-                console.log(this.laravelData);
             });
         }
     }

@@ -28,7 +28,13 @@
                     >
                         Create Post
                     </router-link>
-                    <a class="collapse-item" href="cards.html">Cards</a>
+
+                    <router-link
+                        :to="{ name: 'ViewPost' }"
+                        class="collapse-item"
+                    >
+                        View all Post
+                    </router-link>
                 </div>
             </div>
         </li>

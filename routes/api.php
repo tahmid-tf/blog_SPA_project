@@ -15,3 +15,4 @@ Route::middleware('auth:sanctum')->group(function (){
 });
 
 Route::get('posts',[PostController::class,'allPosts']);
+Route::get('posts/{id}',[PostController::class,'singlePosts']);
