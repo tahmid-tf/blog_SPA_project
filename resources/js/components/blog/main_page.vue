@@ -81,11 +81,25 @@
                         </div>
                     </span>
 
-                    <!-- Pagination -->
-                    <div style="display : flex; justify-content : center">
+                    <!-- Pagination for main page -->
+                    <div
+                        style="display : flex; justify-content : center"
+                        v-if="paginateCordinator == 'all'"
+                    >
                         <pagination
                             :data="laravelData"
                             @pagination-change-page="getResults"
+                        ></pagination>
+                    </div>
+
+                    <!-- Pagination for category page -->
+                    <div
+                        style="display : flex; justify-content : center"
+                        v-if="paginateCordinator == 'search'"
+                    >
+                        <pagination
+                            :data="laravelData"
+                            @pagination-change-page="betResults"
                         ></pagination>
                     </div>
 
@@ -117,39 +131,9 @@
                     </div>
 
                     <!-- Categories Widget -->
-                    <div class="card my-4">
-                        <h5 class="card-header">Categories</h5>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li>
-                                            <a href="#">Web Design</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">HTML</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Freebies</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li>
-                                            <a href="#">JavaScript</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">CSS</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Tutorials</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <category-component
+                        @category-data="categoryData"
+                    ></category-component>
 
                     <!-- Side Widget -->
                     <div class="card my-4">
@@ -182,7 +166,9 @@
 export default {
     data() {
         return {
-            laravelData: {}
+            laravelData: {},
+            emittedData: "",
+            paginateCordinator: ""
         };
     },
     mounted() {
@@ -201,7 +187,35 @@ export default {
                     });
                 });
                 this.laravelData = response.data.posts;
+                this.paginateCordinator = "all";
+                // console.log(this.paginateCordinator);
             });
+        },
+
+        betResults(page = 1) {
+            var vm = this.emittedData;
+            axios.get(`/api/categories/${vm}?page=` + page).then(response => {
+                response.data.posts.data.forEach(element => {
+                    let id = element.user_id;
+                    response.data.users.forEach(el => {
+                        if (el.id === id) {
+                            element.username = el.name;
+                        }
+                    });
+                });
+                this.laravelData = response.data.posts;
+                // console.log(this.laravelData);
+                this.paginateCordinator = "search";
+                // console.log(this.paginateCordinator);
+            });
+        },
+
+        categoryData(e) {
+            // console.log(e);
+            this.emittedData = e;
+            // console.log(this.emittedData);
+            this.laravelData = {};
+            this.betResults();
         }
     }
 };
