@@ -6,6 +6,7 @@ import AdminPage from "../components/admin/admin_index";
 import AdminDashboard from "../components/admin/dashboard/dashboard";
 import LoginUi from "../components/administration/login_ui";
 import CreatePost from "../components/admin/post/post_create";
+import EditPost from "../components/admin/post/post_edit";
 import ViewPost from "../components/admin/post/post_view";
 
 const routes = [
@@ -45,6 +46,11 @@ const routes = [
         path: "/admin/post/view",
         component: ViewPost,
         name: "ViewPost"
+    },
+    {
+        path: "/admin/post/edit/:id",
+        component: EditPost,
+        name: "EditPost"
     }
 ];
 

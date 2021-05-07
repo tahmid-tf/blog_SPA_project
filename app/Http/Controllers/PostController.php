@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -16,7 +17,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Auth::user();
+        $post = Post::orderBy('id','desc')->paginate(25);
+        $user = User::all();
+        return response()->json([
+            'posts' => $post,
+            'users' => $user
+        ]);
     }
 
     public function allPosts(){
@@ -55,6 +61,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
         $user = Auth::user();
 
         $inputs = \request()->validate([
@@ -64,9 +71,11 @@ class PostController extends Controller
             'image' => 'file'
         ]);
 
+
         if(request('image')){
             $inputs['image'] = \request('image')->store('images','public');
         }
+
 
         $user->posts()->create($inputs);
         return response()->json([
@@ -105,7 +114,24 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+
+        $inputs = \request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'category' => 'required'
+        ]);
+
+        if(request('image')){
+            $inputs['image'] = \request('image')->store('images','public');
+        }else{
+            $inputs['image'] = $post->image;
+        }
+
+        $post->update($inputs);
+        return response()->json([
+            "message" => "Succesfull"
+        ]);
+
     }
 
     /**
@@ -116,6 +142,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if (Storage::disk('public')->exists($post->product_image)) {
+            $image = 'storage/' . $post->product_image;
+            unlink($image);
+        }
+        $post->delete();
+        return response()->json([
+            "message" => "Successfully Deleted"
+        ]);
     }
 }

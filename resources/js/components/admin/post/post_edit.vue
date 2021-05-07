@@ -2,8 +2,8 @@
     <div>
         <admin-index-page>
             <slot>
-                <p v-if="uploadInfo">File uploaded successfully</p>
-                <form @submit.prevent="upload">
+                <p v-if="uploadInfo">File updated successfully</p>
+                <form @submit.prevent="upload" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="exampleInputEmail">Title</label>
                         <input
@@ -84,12 +84,17 @@ export default {
             formData.set("description", this.description);
             formData.set("category", this.category);
             formData.set("image", this.image);
-            axios.post("/api/post", formData).then(el => {
-                console.log(el);
-                if (el.status === 200) {
-                    this.uploadInfo = true;
-                }
-            });
+            formData.append("_method", "PUT");
+            axios
+                .post(`/api/post/${this.$route.params.id}`, formData)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.$router.push({ name: "ViewPost" });
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
 
@@ -100,6 +105,12 @@ export default {
             }, 2000);
         }
     },
-    mounted() {}
+    mounted() {
+        axios.get(`/api/posts/${this.$route.params.id}`).then(res => {
+            this.title = res.data.post.title;
+            this.description = res.data.post.description;
+            this.category = res.data.post.category;
+        });
+    }
 };
 </script>
