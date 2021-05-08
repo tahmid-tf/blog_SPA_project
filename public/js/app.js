@@ -3678,6 +3678,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -60147,54 +60152,57 @@ var render = function() {
       "nav",
       { staticClass: "navbar navbar-expand-lg navbar-dark bg-dark fixed-top" },
       [
-        _c(
-          "div",
-          { staticClass: "container" },
-          [
-            _c(
-              "router-link",
-              { staticClass: "navbar-brand", attrs: { to: "/", tag: "a" } },
-              [_vm._v("Blog")]
-            ),
-            _vm._v(" "),
-            _vm._m(0),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "collapse navbar-collapse",
-                attrs: { id: "navbarResponsive" }
-              },
-              [
-                _c("ul", { staticClass: "navbar-nav ml-auto" }, [
-                  _c("li", { staticClass: "nav-item active" }, [
+        _c("div", { staticClass: "container" }, [
+          _c(
+            "span",
+            {
+              staticClass: "navbar-brand",
+              staticStyle: { cursor: "pointer" },
+              on: {
+                click: function($event) {
+                  return _vm.returnToHome()
+                }
+              }
+            },
+            [_vm._v("\n                TF Blog\n            ")]
+          ),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse navbar-collapse",
+              attrs: { id: "navbarResponsive" }
+            },
+            [
+              _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+                _c(
+                  "li",
+                  { staticClass: "nav-item active" },
+                  [
                     _c(
-                      "span",
+                      "router-link",
                       {
                         staticClass: "nav-link",
-                        staticStyle: { cursor: "pointer" },
-                        on: {
-                          click: function($event) {
-                            return _vm.returnToHome()
-                          }
-                        }
+                        attrs: { to: { name: "ViewPost" } }
                       },
-                      [_vm._v("Home")]
+                      [_vm._v("Admin Panel")]
                     )
-                  ])
-                ])
-              ]
-            )
-          ],
-          1
-        )
+                  ],
+                  1
+                )
+              ])
+            ]
+          )
+        ])
       ]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-md-8" }, [
-          _vm._m(1),
+          _c("p"),
           _vm._v(" "),
           _vm.dataLength
             ? _c(
@@ -60368,14 +60376,14 @@ var render = function() {
               on: { "category-data": _vm.categoryData }
             }),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(1)
           ],
           1
         )
       ])
     ]),
     _vm._v(" "),
-    _vm._m(3)
+    _vm._m(2)
   ])
 }
 var staticRenderFns = [
@@ -60398,15 +60406,6 @@ var staticRenderFns = [
       },
       [_c("span", { staticClass: "navbar-toggler-icon" })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h1", { staticClass: "my-4" }, [
-      _vm._v("\n                    Page Heading\n                    "),
-      _c("small", [_vm._v("Secondary Text")])
-    ])
   },
   function() {
     var _vm = this

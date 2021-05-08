@@ -2,9 +2,13 @@
     <div class="body">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <router-link to="/" tag="a" class="navbar-brand"
-                    >Blog</router-link
+                <span
+                    class="navbar-brand"
+                    style="cursor : pointer"
+                    @click="returnToHome()"
                 >
+                    TF Blog
+                </span>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -23,11 +27,11 @@
                                 >Home
                                 <span class="sr-only">(current)</span>
                             </a> -->
-                            <span
+
+                            <router-link
+                                :to="{ name: 'ViewPost' }"
                                 class="nav-link"
-                                style="cursor : pointer"
-                                @click="returnToHome()"
-                                >Home</span
+                                >Admin Panel</router-link
                             >
                         </li>
                         <!-- <li class="nav-item">
@@ -49,10 +53,11 @@
             <div class="row">
                 <!-- Blog Entries Column -->
                 <div class="col-md-8">
-                    <h1 class="my-4">
+                    <p></p>
+                    <!-- <h1 class="my-4">
                         Page Heading
                         <small>Secondary Text</small>
-                    </h1>
+                    </h1> -->
 
                     <div v-if="dataLength">
                         <span v-for="post in laravelData.data" :key="post.id">
