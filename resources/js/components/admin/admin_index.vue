@@ -48,6 +48,7 @@
                     <!-- Nav Item - Pages Collapse Menu -->
 
                     <post-components></post-components>
+                    <authorization-component></authorization-component>
 
                     <!-- Sidebar Toggler (Sidebar) -->
                     <div class="text-center d-none d-md-inline">
@@ -563,6 +564,7 @@ import "../../../../public/vendor/bootstrap/js/bootstrap.bundle.min.js";
 import "../../../../public/vendor/jquery-easing/jquery.easing.min.js";
 import LoginUi from "../administration/login_ui";
 import PostComponents from "../admin/sidebar_components/post_components";
+import AuthorizationComponent from "../admin/sidebar_components/authorization_component";
 export default {
     data() {
         return {
@@ -574,7 +576,8 @@ export default {
 
     components: {
         LoginUi,
-        PostComponents
+        PostComponents,
+        AuthorizationComponent
     },
 
     methods: {

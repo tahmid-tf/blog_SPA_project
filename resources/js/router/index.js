@@ -8,6 +8,8 @@ import LoginUi from "../components/administration/login_ui";
 import CreatePost from "../components/admin/post/post_create";
 import EditPost from "../components/admin/post/post_edit";
 import ViewPost from "../components/admin/post/post_view";
+import CreateAdmin from "../components/admin/authority/create_admin";
+import ViewAdmin from "../components/admin/authority/view_admin";
 
 const routes = [
     {
@@ -51,6 +53,16 @@ const routes = [
         path: "/admin/post/edit/:id",
         component: EditPost,
         name: "EditPost"
+    },
+    {
+        path: "/admin/authority/create-user",
+        component: CreateAdmin,
+        name: "CreateAdmin"
+    },
+    {
+        path: "/admin/authority/view-user",
+        component: ViewAdmin,
+        name: "ViewAdmin"
     }
 ];
 
