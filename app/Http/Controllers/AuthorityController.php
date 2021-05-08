@@ -24,4 +24,12 @@ class AuthorityController extends Controller
             "message" => "Successfully delated"
         ]);
     }
+
+    public function loggedInAccountDelete(){
+        $user = Auth::user();
+        $user->delete();
+        return response()->json([
+            'message' => "Successfully deleted"
+        ]);
+    }
 }

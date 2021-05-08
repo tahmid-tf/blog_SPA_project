@@ -20,7 +20,7 @@
             >
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">
-                        Authorization Components:
+                        Options
                     </h6>
                     <router-link
                         :to="{ name: 'CreateAdmin' }"
@@ -35,6 +35,13 @@
                     >
                         Admin action
                     </router-link>
+
+                    <span
+                        class="collapse-item"
+                        style="cursor : pointer"
+                        @click="accountDelete()"
+                        >Delete Account</span
+                    >
 
                     <!-- <router-link
                         :to="{ name: 'ViewPost' }"
@@ -57,5 +64,21 @@
 </template>
 
 <script>
-export default {};
+export default {
+    methods: {
+        accountDelete() {
+            const confirmation = confirm(
+                "Are you sure to remove your account?"
+            );
+            if (confirmation) {
+                axios.get("/api/admins/loggedin/delete").then(el => {
+                    if (el.status === 200) {
+                        axios.post("/api/logout");
+                        this.$router.push("/");
+                    }
+                });
+            }
+        }
+    }
+};
 </script>

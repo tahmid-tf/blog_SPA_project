@@ -25,11 +25,11 @@ const routes = [
         path: "/admin",
         component: AdminPage
     },
-    {
-        path: "/admin/dashboard",
-        component: AdminDashboard,
-        name: "Dashboard"
-    },
+    // {
+    //     path: "/admin/dashboard",
+    //     component: AdminDashboard,
+    //     name: "Dashboard"
+    // },
     {
         path: "*",
         redirect: "/"

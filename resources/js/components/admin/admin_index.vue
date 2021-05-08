@@ -25,8 +25,8 @@
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0" />
 
-                    <!-- Nav Item - Dashboard -->
-                    <li class="nav-item">
+                    <!-- Nav Item - Dashboard ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+                    <!-- <li class="nav-item">
                         <router-link
                             :to="{ name: 'Dashboard' }"
                             tag="a"
@@ -35,7 +35,7 @@
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </router-link>
-                    </li>
+                    </li> -->
 
                     <!-- Divider -->
                     <hr class="sidebar-divider" />

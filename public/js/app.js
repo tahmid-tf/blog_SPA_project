@@ -3190,7 +3190,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    accountDelete: function accountDelete() {
+      var _this = this;
+
+      var confirmation = confirm("Are you sure to remove your account?");
+
+      if (confirmation) {
+        axios.get("/api/admins/loggedin/delete").then(function (el) {
+          if (el.status === 200) {
+            axios.post("/api/logout");
+
+            _this.$router.push("/");
+          }
+        });
+      }
+    }
+  }
+});
 
 /***/ }),
 
@@ -3346,7 +3371,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (el) {
         if (el.status === 200) {
           _this.$router.push({
-            name: "Dashboard"
+            name: "ViewPost"
           });
         }
       });
@@ -20467,11 +20492,12 @@ var routes = [{
 }, {
   path: "/admin",
   component: _components_admin_admin_index__WEBPACK_IMPORTED_MODULE_3__.default
-}, {
-  path: "/admin/dashboard",
-  component: _components_admin_dashboard_dashboard__WEBPACK_IMPORTED_MODULE_4__.default,
-  name: "Dashboard"
-}, {
+}, // {
+//     path: "/admin/dashboard",
+//     component: AdminDashboard,
+//     name: "Dashboard"
+// },
+{
   path: "*",
   redirect: "/"
 }, {
@@ -58188,26 +58214,6 @@ var render = function() {
             _vm._v(" "),
             _c("hr", { staticClass: "sidebar-divider my-0" }),
             _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item" },
-              [
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "nav-link",
-                    attrs: { to: { name: "Dashboard" }, tag: "a" }
-                  },
-                  [
-                    _c("i", { staticClass: "fas fa-fw fa-tachometer-alt" }),
-                    _vm._v(" "),
-                    _c("span", [_vm._v("Dashboard")])
-                  ]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
             _c("hr", { staticClass: "sidebar-divider" }),
             _vm._v(" "),
             _c("div", { staticClass: "sidebar-heading" }, [
@@ -59748,9 +59754,7 @@ var render = function() {
             { staticClass: "bg-white py-2 collapse-inner rounded" },
             [
               _c("h6", { staticClass: "collapse-header" }, [
-                _vm._v(
-                  "\n                    Authorization Components:\n                "
-                )
+                _vm._v("\n                    Options\n                ")
               ]),
               _vm._v(" "),
               _c(
@@ -59769,6 +59773,20 @@ var render = function() {
                   attrs: { to: { name: "ViewAdmin" } }
                 },
                 [_vm._v("\n                    Admin action\n                ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "span",
+                {
+                  staticClass: "collapse-item",
+                  staticStyle: { cursor: "pointer" },
+                  on: {
+                    click: function($event) {
+                      return _vm.accountDelete()
+                    }
+                  }
+                },
+                [_vm._v("Delete Account")]
               )
             ],
             1
