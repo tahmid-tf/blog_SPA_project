@@ -25,4 +25,13 @@ class CategoryController extends Controller
             'users' => $user
         ]);
     }
+
+    public function searchPosts($title){
+        $post = Post::where('title', 'like', '%' . $title . '%')->paginate(10);
+        $user = User::all();
+        return response()->json([
+            'posts' => $post,
+            'users' => $user
+        ]);
+    }
 }

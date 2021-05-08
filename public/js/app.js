@@ -3365,18 +3365,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       laravelData: {},
       emittedData: "",
-      paginateCordinator: ""
+      paginateCordinator: "",
+      searchPost: "",
+      dataLength: false
     };
   },
   mounted: function mounted() {
     this.getResults();
   },
   methods: {
+    lengthTest: function lengthTest() {
+      console.log(this.laravelData.length);
+      return Object.keys(this.laravelData.data).length > 0 ? true : false;
+    },
+    searchForPost: function searchForPost() {
+      // console.log(this.searchPost);
+      this.laravelData = {};
+      this.searchResults();
+    },
+    returnToHome: function returnToHome() {
+      this.laravelData = {};
+      this.getResults();
+    },
     // Our method to GET results from a Laravel endpoint
     getResults: function getResults() {
       var _this = this;
@@ -3392,10 +3431,12 @@ __webpack_require__.r(__webpack_exports__);
           });
         });
         _this.laravelData = response.data.posts;
+        _this.laravelData.data.length > 0 ? _this.dataLength = true : _this.dataLength = false;
         _this.paginateCordinator = "all"; // console.log(this.paginateCordinator);
+        // console.log(this.dataLength);
       });
     },
-    betResults: function betResults() {
+    categoryResults: function categoryResults() {
       var _this2 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
@@ -3409,9 +3450,30 @@ __webpack_require__.r(__webpack_exports__);
             }
           });
         });
-        _this2.laravelData = response.data.posts; // console.log(this.laravelData);
+        _this2.laravelData = response.data.posts;
+        _this2.laravelData.data.length > 0 ? _this2.dataLength = true : _this2.dataLength = false; // console.log(this.laravelData);
 
-        _this2.paginateCordinator = "search"; // console.log(this.paginateCordinator);
+        _this2.paginateCordinator = "category"; // console.log(this.paginateCordinator);
+      });
+    },
+    searchResults: function searchResults() {
+      var _this3 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var vm = this.searchPost;
+      axios.get("/api/categories/search/".concat(vm, "?page=") + page).then(function (response) {
+        response.data.posts.data.forEach(function (element) {
+          var id = element.user_id;
+          response.data.users.forEach(function (el) {
+            if (el.id === id) {
+              element.username = el.name;
+            }
+          });
+        });
+        _this3.laravelData = response.data.posts;
+        _this3.laravelData.data.length > 0 ? _this3.dataLength = true : _this3.dataLength = false; // console.log(this.laravelData);
+
+        _this3.paginateCordinator = "search"; // console.log(this.paginateCordinator);
       });
     },
     categoryData: function categoryData(e) {
@@ -3419,7 +3481,7 @@ __webpack_require__.r(__webpack_exports__);
       this.emittedData = e; // console.log(this.emittedData);
 
       this.laravelData = {};
-      this.betResults();
+      this.categoryResults();
     }
   }
 });
@@ -59233,7 +59295,32 @@ var render = function() {
             _vm._v(" "),
             _vm._m(0),
             _vm._v(" "),
-            _vm._m(1)
+            _c(
+              "div",
+              {
+                staticClass: "collapse navbar-collapse",
+                attrs: { id: "navbarResponsive" }
+              },
+              [
+                _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+                  _c("li", { staticClass: "nav-item active" }, [
+                    _c(
+                      "span",
+                      {
+                        staticClass: "nav-link",
+                        staticStyle: { cursor: "pointer" },
+                        on: {
+                          click: function($event) {
+                            return _vm.returnToHome()
+                          }
+                        }
+                      },
+                      [_vm._v("Home")]
+                    )
+                  ])
+                ])
+              ]
+            )
           ],
           1
         )
@@ -59242,134 +59329,189 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row" }, [
-        _c(
-          "div",
-          { staticClass: "col-md-8" },
-          [
-            _vm._m(2),
-            _vm._v(" "),
-            _vm._l(_vm.laravelData.data, function(post) {
-              return _c("span", { key: post.id }, [
-                _c("div", { staticClass: "card mb-4" }, [
-                  _c("img", {
-                    staticClass: "card-img-top",
-                    attrs: {
-                      src: "storage/" + post.image,
-                      alt: "Card image cap"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "card-body" },
-                    [
-                      _c("h2", { staticClass: "card-title" }, [
-                        _vm._v(_vm._s(post.title))
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "card-text" }, [
-                        _vm._v(
-                          "\n                                " +
-                            _vm._s(post.description) +
-                            "\n                            "
-                        )
-                      ]),
+        _c("div", { staticClass: "col-md-8" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _vm.dataLength
+            ? _c(
+                "div",
+                _vm._l(_vm.laravelData.data, function(post) {
+                  return _c("span", { key: post.id }, [
+                    _c("div", { staticClass: "card mb-4" }, [
+                      _c("img", {
+                        staticClass: "card-img-top",
+                        attrs: {
+                          src: "storage/" + post.image,
+                          alt: "Card image cap"
+                        }
+                      }),
                       _vm._v(" "),
                       _c(
-                        "router-link",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: {
-                            to: {
-                              name: "Single",
-                              params: { id: post.id }
+                        "div",
+                        { staticClass: "card-body" },
+                        [
+                          _c("h2", { staticClass: "card-title" }, [
+                            _vm._v(_vm._s(post.title))
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text" }, [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(post.description) +
+                                "\n                                "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: {
+                                to: {
+                                  name: "Single",
+                                  params: { id: post.id }
+                                },
+                                tag: "a"
+                              }
                             },
-                            tag: "a"
-                          }
-                        },
-                        [_vm._v("Read More →")]
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "card-footer text-muted" }, [
-                    _vm._v(
-                      "\n                            " +
-                        _vm._s(post.created_at) +
-                        "\n                            "
-                    ),
-                    _c("p", { staticStyle: { color: "green" } }, [
-                      _vm._v(
-                        "\n                                Posted by - " +
-                          _vm._s(post.username) +
-                          "\n                            "
-                      )
+                            [_vm._v("Read More →")]
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-footer text-muted" }, [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(post.created_at) +
+                            "\n                                "
+                        ),
+                        _c("p", { staticStyle: { color: "green" } }, [
+                          _vm._v(
+                            "\n                                    Posted by - " +
+                              _vm._s(post.username) +
+                              "\n                                "
+                          )
+                        ])
+                      ])
                     ])
                   ])
-                ])
-              ])
-            }),
-            _vm._v(" "),
-            _vm.paginateCordinator == "all"
-              ? _c(
-                  "div",
-                  {
-                    staticStyle: {
-                      display: "flex",
-                      "justify-content": "center"
-                    }
-                  },
-                  [
-                    _c("pagination", {
-                      attrs: { data: _vm.laravelData },
-                      on: { "pagination-change-page": _vm.getResults }
-                    })
-                  ],
-                  1
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.paginateCordinator == "search"
-              ? _c(
-                  "div",
-                  {
-                    staticStyle: {
-                      display: "flex",
-                      "justify-content": "center"
-                    }
-                  },
-                  [
-                    _c("pagination", {
-                      attrs: { data: _vm.laravelData },
-                      on: { "pagination-change-page": _vm.betResults }
-                    })
-                  ],
-                  1
-                )
-              : _vm._e()
-          ],
-          2
-        ),
+                }),
+                0
+              )
+            : _c("div", [_c("p", [_vm._v("Search result not found")])]),
+          _vm._v(" "),
+          _vm.paginateCordinator == "all"
+            ? _c(
+                "div",
+                {
+                  staticStyle: { display: "flex", "justify-content": "center" }
+                },
+                [
+                  _c("pagination", {
+                    attrs: { data: _vm.laravelData },
+                    on: { "pagination-change-page": _vm.getResults }
+                  })
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.paginateCordinator == "category"
+            ? _c(
+                "div",
+                {
+                  staticStyle: { display: "flex", "justify-content": "center" }
+                },
+                [
+                  _c("pagination", {
+                    attrs: { data: _vm.laravelData },
+                    on: { "pagination-change-page": _vm.categoryResults }
+                  })
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.paginateCordinator == "search"
+            ? _c(
+                "div",
+                {
+                  staticStyle: { display: "flex", "justify-content": "center" }
+                },
+                [
+                  _c("pagination", {
+                    attrs: { data: _vm.laravelData },
+                    on: { "pagination-change-page": _vm.searchResults }
+                  })
+                ],
+                1
+              )
+            : _vm._e()
+        ]),
         _vm._v(" "),
         _c(
           "div",
           { staticClass: "col-md-4" },
           [
-            _vm._m(3),
+            _c("div", { staticClass: "card my-4" }, [
+              _c("h5", { staticClass: "card-header" }, [_vm._v("Search")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "input-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.searchPost,
+                        expression: "searchPost"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Search for..." },
+                    domProps: { value: _vm.searchPost },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.searchPost = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "input-group-btn" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button" },
+                        on: { click: _vm.searchForPost }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                    Go!\n                                "
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ]),
             _vm._v(" "),
             _c("category-component", {
               on: { "category-data": _vm.categoryData }
             }),
             _vm._v(" "),
-            _vm._m(4)
+            _vm._m(2)
           ],
           1
         )
       ])
     ]),
     _vm._v(" "),
-    _vm._m(5)
+    _vm._m(3)
   ])
 }
 var staticRenderFns = [
@@ -59397,78 +59539,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "collapse navbar-collapse",
-        attrs: { id: "navbarResponsive" }
-      },
-      [
-        _c("ul", { staticClass: "navbar-nav ml-auto" }, [
-          _c("li", { staticClass: "nav-item active" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("Home\n                            "),
-              _c("span", { staticClass: "sr-only" }, [_vm._v("(current)")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("About")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("Services")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("Contact")
-            ])
-          ])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("h1", { staticClass: "my-4" }, [
       _vm._v("\n                    Page Heading\n                    "),
       _c("small", [_vm._v("Secondary Text")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card my-4" }, [
-      _c("h5", { staticClass: "card-header" }, [_vm._v("Search")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "input-group" }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Search for..." }
-          }),
-          _vm._v(" "),
-          _c("span", { staticClass: "input-group-btn" }, [
-            _c(
-              "button",
-              { staticClass: "btn btn-secondary", attrs: { type: "button" } },
-              [
-                _vm._v(
-                  "\n                                    Go!\n                                "
-                )
-              ]
-            )
-          ])
-        ])
-      ])
     ])
   },
   function() {

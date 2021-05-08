@@ -20,3 +20,4 @@ Route::get('posts/{id}',[PostController::class,'singlePosts']);
 
 Route::get('/categories',[CategoryController::class,'categories']);
 Route::get('/categories/{category}',[CategoryController::class,'categoryPosts']);
+Route::get('/categories/search/{search}',[CategoryController::class,'searchPosts']);
