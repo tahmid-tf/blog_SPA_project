@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get("admins",[AuthorityController::class,"viewAllAdmin"]);
     Route::get("admins/delete/{id}",[AuthorityController::class,"deleteAdmin"]);
     Route::get("admins/loggedin/delete",[AuthorityController::class,"loggedInAccountDelete"]);
+    Route::post("admins/loggedin/change-pass",[AuthorityController::class,"changePassword"]);
 });
 
 Route::get('posts',[PostController::class,'allPosts']);

@@ -32,4 +32,21 @@ class AuthorityController extends Controller
             'message' => "Successfully deleted"
         ]);
     }
+
+    public function changePassword(Request $request){
+        $pass = auth()->user()->password;
+
+        $current_password = request('current_password');
+        $new_password = request('new_password');
+        $confirm_password = request('verify_password');
+
+        if(\Illuminate\Support\Facades\Hash::check($current_password,$pass) && $new_password === $confirm_password){
+            auth()->user()->update([
+                'password' => bcrypt($new_password)
+            ]);
+            return response()->json([
+                "message" => "Check Successfull"
+            ]);
+        }
+    }
 }

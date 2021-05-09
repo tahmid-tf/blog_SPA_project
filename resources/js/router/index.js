@@ -10,6 +10,7 @@ import EditPost from "../components/admin/post/post_edit";
 import ViewPost from "../components/admin/post/post_view";
 import CreateAdmin from "../components/admin/authority/create_admin";
 import ViewAdmin from "../components/admin/authority/view_admin";
+import ChangePassword from "../components/admin/authority/change_password";
 
 const routes = [
     {
@@ -63,6 +64,11 @@ const routes = [
         path: "/admin/authority/view-user",
         component: ViewAdmin,
         name: "ViewAdmin"
+    },
+    {
+        path: "/admin/authority/change-password",
+        component: ChangePassword,
+        name: "ChangePassword"
     }
 ];
 

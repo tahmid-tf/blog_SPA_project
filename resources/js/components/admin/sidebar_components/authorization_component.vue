@@ -36,19 +36,19 @@
                         Admin action
                     </router-link>
 
+                    <router-link
+                        :to="{ name: 'ChangePassword' }"
+                        class="collapse-item"
+                    >
+                        Change Password
+                    </router-link>
+
                     <span
                         class="collapse-item"
                         style="cursor : pointer"
                         @click="accountDelete()"
                         >Delete Account</span
                     >
-
-                    <!-- <router-link
-                        :to="{ name: 'ViewPost' }"
-                        class="collapse-item"
-                    >
-                        Delete account
-                    </router-link> -->
 
                     <!-- <router-link
                         :to="{ name: 'ViewPost' }"
