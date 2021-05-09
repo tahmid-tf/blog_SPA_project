@@ -78,7 +78,9 @@ export default {
                 .then(el => {
                     if (el.data.message) {
                         alert("Password Changed Successfully");
-                        this.$router.push({ name: "ViewPost" });
+                        axios.post("/api/logout").then(el => {
+                            return this.$router.push({ name: "Login" });
+                        });
                     } else {
                         alert("Check input fields again");
                     }

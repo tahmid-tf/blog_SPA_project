@@ -2609,9 +2609,10 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (el) {
         if (el.data.message) {
           alert("Password Changed Successfully");
-
-          _this.$router.push({
-            name: "ViewPost"
+          axios.post("/api/logout").then(function (el) {
+            return _this.$router.push({
+              name: "Login"
+            });
           });
         } else {
           alert("Check input fields again");
