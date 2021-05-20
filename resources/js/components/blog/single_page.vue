@@ -3,9 +3,13 @@
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <router-link to="/" tag="a" class="navbar-brand"
-                    >Blog</router-link
+                <span
+                    class="navbar-brand"
+                    style="cursor : pointer"
+                    @click="returnToHome()"
                 >
+                    TF Blog
+                </span>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -20,12 +24,18 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#"
+                            <!-- <a class="nav-link" href="#"
                                 >Home
                                 <span class="sr-only">(current)</span>
-                            </a>
+                            </a> -->
+
+                            <router-link
+                                :to="{ name: 'ViewPost' }"
+                                class="nav-link"
+                                >Admin Panel</router-link
+                            >
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="#">About</a>
                         </li>
                         <li class="nav-item">
@@ -33,7 +43,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contact</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -43,7 +53,7 @@
         <div class="container">
             <div class="row">
                 <!-- Post Content Column -->
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <!-- Title -->
                     <h1 class="mt-4">{{ postData.title }}</h1>
 
@@ -71,81 +81,57 @@
 
                     <!-- Post Content -->
                     <p class="lead">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. Ducimus, vero, obcaecati, aut, error quam sapiente
-                        nemo saepe quibusdam sit excepturi nam quia corporis
-                        eligendi eos magni recusandae laborum minus inventore?
+                        {{ postData.description }}
                     </p>
 
                     <hr />
                 </div>
 
-                <!-- Sidebar Widgets Column -->
-                <div class="col-md-4">
-                    <!-- Search Widget -->
+                <div class="col-lg-12">
+                    <!-- Comments Form -->
                     <div class="card my-4">
-                        <h5 class="card-header">Search</h5>
+                        <h5 class="card-header">Leave a Comment:</h5>
                         <div class="card-body">
-                            <div class="input-group">
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Search for..."
-                                />
-                                <span class="input-group-btn">
-                                    <button
-                                        class="btn btn-secondary"
-                                        type="button"
-                                    >
-                                        Go!
-                                    </button>
-                                </span>
-                            </div>
+                            <form @submit.prevent="sendComment">
+                                <div class="form-group">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        class="form-control"
+                                        placeholder="Enter your name"
+                                        v-model="username"
+                                    />
+                                </div>
+                                <div class="form-group">
+                                    <textarea
+                                        class="form-control"
+                                        rows="3"
+                                        v-model="commentLine"
+                                        placeholder="Enter comment"
+                                    ></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </form>
                         </div>
                     </div>
 
-                    <!-- Categories Widget -->
-                    <div class="card my-4">
-                        <h5 class="card-header">Categories</h5>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li>
-                                            <a href="#">Web Design</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">HTML</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Freebies</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li>
-                                            <a href="#">JavaScript</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">CSS</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Tutorials</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Side Widget -->
-                    <div class="card my-4">
-                        <h5 class="card-header">Side Widget</h5>
-                        <div class="card-body">
-                            You can put anything you want inside of these side
-                            widgets. They are easy to use, and feature the new
-                            Bootstrap 4 card containers!
+                    <!-- Single Comment -->
+                    <div
+                        class="media mb-4"
+                        v-for="comment in comments"
+                        :key="comment.id"
+                    >
+                        <img
+                            class="d-flex mr-3 rounded-circle"
+                            src="http://placehold.it/50x50"
+                            alt=""
+                        />
+                        <div class="media-body">
+                            <h5 class="mt-0">{{ comment.name }} says,</h5>
+                            {{ comment.description }}
+                            <hr />
                         </div>
                     </div>
                 </div>
@@ -175,21 +161,49 @@ export default {
     data() {
         return {
             postData: "",
-            img: "/storage/images/DJ3GMrjjbedI10W7IpbZgZEvfhZHPWl0aqRHOMMJ.png"
+            img: "/storage/images/DJ3GMrjjbedI10W7IpbZgZEvfhZHPWl0aqRHOMMJ.png",
+            commentLine: "",
+            post_id: 0,
+            username: "",
+            comments: ""
         };
     },
     mounted() {
         axios.get(`/api/posts/${this.$route.params.id}`).then(response => {
             let id = response.data.post.user_id;
-            console.log(id);
+            let post_id = response.data.post.id;
+            this.post_id = post_id;
+            // console.log(id);
             response.data.users.forEach(element => {
                 if (element.id === id) {
                     response.data.post.username = element.name;
                     this.postData = response.data.post;
-                    console.log(this.postData);
+                    // console.log(this.postData);
                 }
             });
         });
+
+        this.viewComment();
+    },
+    methods: {
+        sendComment() {
+            axios
+                .post("/api/comment", {
+                    name: this.username,
+                    description: this.commentLine,
+                    id: this.post_id
+                })
+                .then(res => console.log(res));
+            this.viewComment();
+        },
+
+        viewComment() {
+            console.log(this.$route.params.id);
+            axios.get(`/api/comment/show/5`).then(res => {
+                this.comments = res.data.comments;
+                console.log(this.comments);
+            });
+        }
     }
 };
 </script>

@@ -85,7 +85,7 @@
                                     >
                                 </div>
                                 <div class="card-footer text-muted">
-                                    {{ post.created_at }}
+                                    {{ new Date(post.created_at) }}
                                     <p style="color : green">
                                         Posted by - {{ post.username }}
                                     </p>
@@ -233,6 +233,7 @@ export default {
                     });
                 });
                 this.laravelData = response.data.posts;
+
                 this.laravelData.data.length > 0
                     ? (this.dataLength = true)
                     : (this.dataLength = false);

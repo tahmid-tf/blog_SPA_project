@@ -4057,27 +4057,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       postData: "",
-      img: "/storage/images/DJ3GMrjjbedI10W7IpbZgZEvfhZHPWl0aqRHOMMJ.png"
+      img: "/storage/images/DJ3GMrjjbedI10W7IpbZgZEvfhZHPWl0aqRHOMMJ.png",
+      commentLine: "",
+      post_id: 0,
+      username: "",
+      comments: ""
     };
   },
   mounted: function mounted() {
@@ -4085,15 +4075,38 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get("/api/posts/".concat(this.$route.params.id)).then(function (response) {
       var id = response.data.post.user_id;
-      console.log(id);
+      var post_id = response.data.post.id;
+      _this.post_id = post_id; // console.log(id);
+
       response.data.users.forEach(function (element) {
         if (element.id === id) {
           response.data.post.username = element.name;
-          _this.postData = response.data.post;
-          console.log(_this.postData);
+          _this.postData = response.data.post; // console.log(this.postData);
         }
       });
     });
+    this.viewComment();
+  },
+  methods: {
+    sendComment: function sendComment() {
+      axios.post("/api/comment", {
+        name: this.username,
+        description: this.commentLine,
+        id: this.post_id
+      }).then(function (res) {
+        return console.log(res);
+      });
+      this.viewComment();
+    },
+    viewComment: function viewComment() {
+      var _this2 = this;
+
+      console.log(this.$route.params.id);
+      axios.get("/api/comment/show/5").then(function (res) {
+        _this2.comments = res.data.comments;
+        console.log(_this2.comments);
+      });
+    }
   }
 });
 
@@ -60609,7 +60622,7 @@ var render = function() {
                       _c("div", { staticClass: "card-footer text-muted" }, [
                         _vm._v(
                           "\n                                " +
-                            _vm._s(post.created_at) +
+                            _vm._s(new Date(post.created_at)) +
                             "\n                                "
                         ),
                         _c("p", { staticStyle: { color: "green" } }, [
@@ -60817,28 +60830,56 @@ var render = function() {
       "nav",
       { staticClass: "navbar navbar-expand-lg navbar-dark bg-dark fixed-top" },
       [
-        _c(
-          "div",
-          { staticClass: "container" },
-          [
-            _c(
-              "router-link",
-              { staticClass: "navbar-brand", attrs: { to: "/", tag: "a" } },
-              [_vm._v("Blog")]
-            ),
-            _vm._v(" "),
-            _vm._m(0),
-            _vm._v(" "),
-            _vm._m(1)
-          ],
-          1
-        )
+        _c("div", { staticClass: "container" }, [
+          _c(
+            "span",
+            {
+              staticClass: "navbar-brand",
+              staticStyle: { cursor: "pointer" },
+              on: {
+                click: function($event) {
+                  return _vm.returnToHome()
+                }
+              }
+            },
+            [_vm._v("\n                TF Blog\n            ")]
+          ),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "collapse navbar-collapse",
+              attrs: { id: "navbarResponsive" }
+            },
+            [
+              _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+                _c(
+                  "li",
+                  { staticClass: "nav-item active" },
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link",
+                        attrs: { to: { name: "ViewPost" } }
+                      },
+                      [_vm._v("Admin Panel")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ]
+          )
+        ])
       ]
     ),
     _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-lg-8" }, [
+        _c("div", { staticClass: "col-lg-12" }, [
           _c("h1", { staticClass: "mt-4" }, [
             _vm._v(_vm._s(_vm.postData.title))
           ]),
@@ -60868,18 +60909,132 @@ var render = function() {
           _vm._v(" "),
           _c("p", { staticClass: "lead" }, [
             _vm._v(
-              "\n                    Lorem ipsum dolor sit amet, consectetur adipisicing\n                    elit. Ducimus, vero, obcaecati, aut, error quam sapiente\n                    nemo saepe quibusdam sit excepturi nam quia corporis\n                    eligendi eos magni recusandae laborum minus inventore?\n                "
+              "\n                    " +
+                _vm._s(_vm.postData.description) +
+                "\n                "
             )
           ]),
           _vm._v(" "),
           _c("hr")
         ]),
         _vm._v(" "),
-        _vm._m(2)
+        _c(
+          "div",
+          { staticClass: "col-lg-12" },
+          [
+            _c("div", { staticClass: "card my-4" }, [
+              _c("h5", { staticClass: "card-header" }, [
+                _vm._v("Leave a Comment:")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" }, [
+                _c(
+                  "form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.sendComment($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.username,
+                            expression: "username"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          name: "name",
+                          placeholder: "Enter your name"
+                        },
+                        domProps: { value: _vm.username },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.username = $event.target.value
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.commentLine,
+                            expression: "commentLine"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { rows: "3", placeholder: "Enter comment" },
+                        domProps: { value: _vm.commentLine },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.commentLine = $event.target.value
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                                Submit\n                            "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.comments, function(comment) {
+              return _c("div", { key: comment.id, staticClass: "media mb-4" }, [
+                _c("img", {
+                  staticClass: "d-flex mr-3 rounded-circle",
+                  attrs: { src: "http://placehold.it/50x50", alt: "" }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "media-body" }, [
+                  _c("h5", { staticClass: "mt-0" }, [
+                    _vm._v(_vm._s(comment.name) + " says,")
+                  ]),
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(comment.description) +
+                      "\n                        "
+                  ),
+                  _c("hr")
+                ])
+              ])
+            })
+          ],
+          2
+        )
       ])
     ]),
     _vm._v(" "),
-    _vm._m(3)
+    _vm._m(1)
   ])
 }
 var staticRenderFns = [
@@ -60902,123 +61057,6 @@ var staticRenderFns = [
       },
       [_c("span", { staticClass: "navbar-toggler-icon" })]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "collapse navbar-collapse",
-        attrs: { id: "navbarResponsive" }
-      },
-      [
-        _c("ul", { staticClass: "navbar-nav ml-auto" }, [
-          _c("li", { staticClass: "nav-item active" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("Home\n                            "),
-              _c("span", { staticClass: "sr-only" }, [_vm._v("(current)")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("About")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("Services")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "nav-item" }, [
-            _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-              _vm._v("Contact")
-            ])
-          ])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4" }, [
-      _c("div", { staticClass: "card my-4" }, [
-        _c("h5", { staticClass: "card-header" }, [_vm._v("Search")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c("div", { staticClass: "input-group" }, [
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Search for..." }
-            }),
-            _vm._v(" "),
-            _c("span", { staticClass: "input-group-btn" }, [
-              _c(
-                "button",
-                { staticClass: "btn btn-secondary", attrs: { type: "button" } },
-                [
-                  _vm._v(
-                    "\n                                    Go!\n                                "
-                  )
-                ]
-              )
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card my-4" }, [
-        _c("h5", { staticClass: "card-header" }, [_vm._v("Categories")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-lg-6" }, [
-              _c("ul", { staticClass: "list-unstyled mb-0" }, [
-                _c("li", [
-                  _c("a", { attrs: { href: "#" } }, [_vm._v("Web Design")])
-                ]),
-                _vm._v(" "),
-                _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("HTML")])]),
-                _vm._v(" "),
-                _c("li", [
-                  _c("a", { attrs: { href: "#" } }, [_vm._v("Freebies")])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-6" }, [
-              _c("ul", { staticClass: "list-unstyled mb-0" }, [
-                _c("li", [
-                  _c("a", { attrs: { href: "#" } }, [_vm._v("JavaScript")])
-                ]),
-                _vm._v(" "),
-                _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("CSS")])]),
-                _vm._v(" "),
-                _c("li", [
-                  _c("a", { attrs: { href: "#" } }, [_vm._v("Tutorials")])
-                ])
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card my-4" }, [
-        _c("h5", { staticClass: "card-header" }, [_vm._v("Side Widget")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _vm._v(
-            "\n                        You can put anything you want inside of these side\n                        widgets. They are easy to use, and feature the new\n                        Bootstrap 4 card containers!\n                    "
-          )
-        ])
-      ])
-    ])
   },
   function() {
     var _vm = this

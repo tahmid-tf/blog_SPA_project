@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthorityController;
+use App\Http\Controllers\CommentController;
 
 Route::post('register',[AuthController::class,'register']);
 Route::post('login',[AuthController::class,'login']);
@@ -26,3 +27,5 @@ Route::get('posts/{id}',[PostController::class,'singlePosts']);
 Route::get('/categories',[CategoryController::class,'categories']);
 Route::get('/categories/{category}',[CategoryController::class,'categoryPosts']);
 Route::get('/categories/search/{search}',[CategoryController::class,'searchPosts']);
+Route::post('/comment',[CommentController::class,'addComment']);
+Route::get('/comment/show/{id}',[CommentController::class,'viewComment']);
