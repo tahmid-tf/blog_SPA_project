@@ -72,7 +72,7 @@
 
                     <!-- Preview Image -->
                     <img
-                        class="card-img-top"
+                        class="img img-fluid"
                         :src="'/storage/' + postData.image"
                         alt="Card image cap"
                     />
@@ -110,6 +110,7 @@
                                         placeholder="Enter comment"
                                     ></textarea>
                                 </div>
+
                                 <button type="submit" class="btn btn-primary">
                                     Submit
                                 </button>
@@ -133,6 +134,13 @@
                             {{ comment.description }}
                             <hr />
                         </div>
+                        <button
+                            class="btn btn-outline-danger"
+                            v-if="buttonStatus"
+                            @click.prevent="removeComment(comment.id)"
+                        >
+                            Remove comment
+                        </button>
                     </div>
                 </div>
             </div>
@@ -165,7 +173,8 @@ export default {
             commentLine: "",
             post_id: 0,
             username: "",
-            comments: ""
+            comments: "",
+            buttonStatus: false
         };
     },
     mounted() {
@@ -184,6 +193,7 @@ export default {
         });
 
         this.viewComment();
+        this.buttonStatusMethohd();
     },
     methods: {
         sendComment() {
@@ -193,16 +203,44 @@ export default {
                     description: this.commentLine,
                     id: this.post_id
                 })
-                .then(res => console.log(res));
+                .then(res => {
+                    if (res.status === 200) {
+                        alert("comment addedd successfully");
+                        this.username = null;
+                        this.commentLine = null;
+                    }
+                });
             this.viewComment();
         },
 
         viewComment() {
-            console.log(this.$route.params.id);
-            axios.get(`/api/comment/show/5`).then(res => {
-                this.comments = res.data.comments;
-                console.log(this.comments);
+            // console.log(this.$route.params.id);
+            axios
+                .get(`/api/comment/show/${this.$route.params.id}`)
+                .then(res => {
+                    this.comments = res.data.comments;
+                    // console.log(this.comments);
+                });
+        },
+        buttonStatusMethohd() {
+            axios.get("/api/user").then(el => {
+                if (el.status === 200) {
+                    this.buttonStatus = true;
+                }
             });
+        },
+        removeComment(id) {
+            const confirmation = confirm("Are you sure?");
+
+            if (confirmation) {
+                axios
+                    .get(`/api/comment/delete/${id}`)
+                    .then(res => console.log(res));
+                this.viewComment();
+            }
+        },
+        returnToHome() {
+            this.$router.push("/");
         }
     }
 };

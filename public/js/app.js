@@ -4057,6 +4057,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -4067,7 +4075,8 @@ __webpack_require__.r(__webpack_exports__);
       commentLine: "",
       post_id: 0,
       username: "",
-      comments: ""
+      comments: "",
+      buttonStatus: false
     };
   },
   mounted: function mounted() {
@@ -4086,26 +4095,54 @@ __webpack_require__.r(__webpack_exports__);
       });
     });
     this.viewComment();
+    this.buttonStatusMethohd();
   },
   methods: {
     sendComment: function sendComment() {
+      var _this2 = this;
+
       axios.post("/api/comment", {
         name: this.username,
         description: this.commentLine,
         id: this.post_id
       }).then(function (res) {
-        return console.log(res);
+        if (res.status === 200) {
+          alert("comment addedd successfully");
+          _this2.username = null;
+          _this2.commentLine = null;
+        }
       });
       this.viewComment();
     },
     viewComment: function viewComment() {
-      var _this2 = this;
+      var _this3 = this;
 
-      console.log(this.$route.params.id);
-      axios.get("/api/comment/show/5").then(function (res) {
-        _this2.comments = res.data.comments;
-        console.log(_this2.comments);
+      // console.log(this.$route.params.id);
+      axios.get("/api/comment/show/".concat(this.$route.params.id)).then(function (res) {
+        _this3.comments = res.data.comments; // console.log(this.comments);
       });
+    },
+    buttonStatusMethohd: function buttonStatusMethohd() {
+      var _this4 = this;
+
+      axios.get("/api/user").then(function (el) {
+        if (el.status === 200) {
+          _this4.buttonStatus = true;
+        }
+      });
+    },
+    removeComment: function removeComment(id) {
+      var confirmation = confirm("Are you sure?");
+
+      if (confirmation) {
+        axios.get("/api/comment/delete/".concat(id)).then(function (res) {
+          return console.log(res);
+        });
+        this.viewComment();
+      }
+    },
+    returnToHome: function returnToHome() {
+      this.$router.push("/");
     }
   }
 });
@@ -60898,7 +60935,7 @@ var render = function() {
           _c("hr"),
           _vm._v(" "),
           _c("img", {
-            staticClass: "card-img-top",
+            staticClass: "img img-fluid",
             attrs: {
               src: "/storage/" + _vm.postData.image,
               alt: "Card image cap"
@@ -61025,7 +61062,27 @@ var render = function() {
                       "\n                        "
                   ),
                   _c("hr")
-                ])
+                ]),
+                _vm._v(" "),
+                _vm.buttonStatus
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-danger",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.removeComment(comment.id)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                        Remove comment\n                    "
+                        )
+                      ]
+                    )
+                  : _vm._e()
               ])
             })
           ],

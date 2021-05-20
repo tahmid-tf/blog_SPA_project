@@ -27,7 +27,7 @@ class PostController extends Controller
     }
 
     public function allPosts(){
-        $post = Post::paginate(10);
+        $post = Post::orderBy('id','desc')->paginate(10);
         $user = User::all();
         return response()->json([
             'posts' => $post,
